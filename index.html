@@ -1,51 +1,4 @@
-<!DOCTYPE html><html><head><script>
-(function() {
-  var ALLOWED_PIXEL = "1134500692387251";
-  // Guard fbq: only allow calls for the approved pixel
-  var _fbqReal = null;
-  Object.defineProperty(window, "fbq", {
-    get: function() { return _fbqReal; },
-    set: function(fn) {
-      _fbqReal = function() {
-        var args = Array.prototype.slice.call(arguments);
-        // Block "init" calls for any pixel other than our approved one
-        if (args[0] === "init" && args[1] !== ALLOWED_PIXEL) {
-          return;
-        }
-        return fn.apply(this, args);
-      };
-      _fbqReal.callMethod = fn.callMethod ? fn.callMethod.bind(fn) : null;
-      _fbqReal.queue = fn.queue || [];
-      _fbqReal.loaded = fn.loaded;
-      _fbqReal.version = fn.version;
-      _fbqReal.push = _fbqReal;
-    },
-    configurable: true
-  });
-  // Block utmify scripts from loading
-  var _createElement = document.createElement.bind(document);
-  document.createElement = function(tag) {
-    var el = _createElement(tag);
-    if (tag.toLowerCase() === "script") {
-      var _setSrc = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, "src") ||
-                    Object.getOwnPropertyDescriptor(Element.prototype, "src");
-      Object.defineProperty(el, "src", {
-        get: function() { return el._src || ""; },
-        set: function(v) {
-          if (typeof v === "string" && v.indexOf("utmify") !== -1) {
-            el._src = "";
-            return;
-          }
-          el._src = v;
-          if (_setSrc && _setSrc.set) _setSrc.set.call(el, v);
-        },
-        configurable: true
-      });
-    }
-    return el;
-  };
-})();
-</script>
+<!DOCTYPE html><html><head>
 <script>
 (function(){
   var fired = {};
@@ -72,7 +25,7 @@
   };
   // Chamado a cada clique em botão de checkout
   window.__ic = function(){
-    track("InitiateCheckout",OFFER,false,false);
+    track("ClickCheckout",OFFER,true,false);
   };
 })();
 </script>
